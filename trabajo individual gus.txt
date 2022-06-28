@@ -1,0 +1,11 @@
+una red social en la que compartir fotos o videos y comentarios cn likes dislikes dnd tengas un login forma de registrarte con base
+ de datos para organizar a los amigos de las cuentas las fotos y todo eso ya que sueño con hacer el siguiente facebook 
+que mejor manera de empezar :)
+para entrar habra que hacer un login
+te saldra una pagina inicial con un header donde habra un menu para añadir amigos ver los que ya tienes y subir fotos
+debaajo podras ver fotos de tus amigos de forma aleatoria y comentarios y darles megustas o no me gustas  
+al ver los amigos que ya tienes podras hacer click en ellos para ver las fotos y comentarios que han subido a su muro
+tus amigos se cargaran en base de datos mysql
+mientras que las urls de las fotos y los comentarios seran en mongo(no se si se puede subir directamente la foto a la base de datos)
+un boton para salir 
+P.D. si podemos hablaar para mejorar un poco esto mejor gracias
