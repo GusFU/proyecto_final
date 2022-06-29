@@ -20,9 +20,7 @@ CREATE TABLE Paises (
     pais VARCHAR(100) NOT NULL,
     PRIMARY KEY(id)
 );
-insert into Paises values (null,"Espania");
-insert into Paises values (null,"Ecuador");
-insert into Paises values (null,"Colombia");
+
 
 #DROP TABLE Estados_civiles;
 CREATE TABLE Estados_civiles (
@@ -30,8 +28,7 @@ CREATE TABLE Estados_civiles (
     estado_civil CHAR(15) NOT NULL,
     PRIMARY KEY(id)
 );
-insert into Estados_civiles values (null,"casado");
-insert into Estados_civiles values (null,"soltero");
+
 
 
 #DROP TABLE Usuarios
@@ -66,8 +63,8 @@ CREATE TABLE Usuarios_usuarios (
     
 );
 
-
-
-
-
+select * from Usuarios;
+select * from Logins;
+select * from Paises;
+select * from Estados_civiles;
 
