@@ -13,45 +13,6 @@ const user = {
         res.render("registro");
 
     },
-    login: async (emailLogin, contrasena, rows) => {
-
-        let cont = 0;
-        let test = true;
-        let encontrado = false;
-        while (test) {//mientras test sea verdadero se hará todo lo que hay dentro.
-            if ((emailLogin == rows[cont].email) && (await user.SHA1(contrasena) == rows[cont].contrasena)) {
-                encontrado = true
-            }
-            test = test && (cont < rows.length - 1) && ((emailLogin != rows[cont].email) || (await user.SHA1(contrasena) != rows[cont].contrasena))
-            cont++
-        }
-
-        return { "encontrado": encontrado, "usuario": rows[cont].id }
-    },
-    registrarse: async (email, rows) => {
-       
-       
-        let cont1 = 0;
-        let test = true;
-        let encontrado = false;
-        if (rows.length == 0) {
-            return encontrado
-        } else {
-            while (test) {
-                test = test && (email != rows[cont1].email) && cont1 < rows.length-1
-                if (email == rows[cont1].email) {
-                    encontrado = true
-
-                } else {
-                    cont1++
-                }             
-            }
-        }
-        
-        
-        return encontrado
-
-    },
     SHA1: async (msg) => {
         function rotate_left(n, s) {
             var t4 = (n << s) | (n >>> (32 - s));
@@ -184,7 +145,21 @@ const user = {
         var temp = cvt_hex(H0) + cvt_hex(H1) + cvt_hex(H2) + cvt_hex(H3) + cvt_hex(H4);
 
         return temp.toLowerCase();
+    },
+    mejores_fotos: (fotos) => {
+        var fotos1=[];
+        fotos.sort(function(a, b) {
+           
+            return (b.me_gusta-b.no_me_gusta) - (a.me_gusta-a.no_me_gusta);
+          });
+
+          for(let i=0;i<10;i++){
+            fotos1.push(fotos[i]);
+          }
+          return fotos1
+
     }
+
 
 }
 
