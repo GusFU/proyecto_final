@@ -1,13 +1,17 @@
-
-const fs = require("fs");
-
-
+const jwt = require("jsonwebtoken");
+const SECRET = "tallerjwt";
 const user = {
-    home: (req, res) => {
-
-        res.render("index");
-
+    autenticacion: (emailUser) => {
+        
+        
+        const payload = {
+            email: emailUser
+           
+        };
+        const token = jwt.sign(payload, SECRET, { expiresIn: "15m" });
+        return token
     },
+
     registro: (req, res) => {
 
         res.render("registro");
@@ -146,17 +150,20 @@ const user = {
 
         return temp.toLowerCase();
     },
-    mejores_fotos: (fotos) => {
-        var fotos1=[];
-        fotos.sort(function(a, b) {
-           
-            return (b.me_gusta-b.no_me_gusta) - (a.me_gusta-a.no_me_gusta);
-          });
+    mejores_fotos2: (fotos) => {
 
-          for(let i=0;i<10;i++){
-            fotos1.push(fotos[i]);
-          }
-          return fotos1
+        var fotos11 = [];
+        fotos.sort(function (a, b) {
+
+            return (b.me_gusta - b.no_me_gusta) - (a.me_gusta - a.no_me_gusta);
+        });
+
+        for (let i = 0; i < 10; i++) {
+            fotos11.push(fotos[i].id_foto);
+        }
+
+
+        return fotos11
 
     }
 

@@ -1,0 +1,104 @@
+.App {
+  text-align: center;
+
+
+}
+.fondo1{
+  background-image: url("../public/fondo.jpg");
+  background-size: cover;
+    background-attachment: fixed;
+    min-height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.fondo2{
+  background-color: rgb(96, 96, 96);
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  
+}
+
+.App-logo {
+  
+  pointer-events: none;
+}
+
+
+
+.App-header {
+  background-color: #282c34;
+  height:  200px;
+  display: flex;
+  flex-direction: column;
+  
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  
+  
+}
+
+.menu {
+  font-family: 'PT sans', Times, sans-serif;
+ background: #282c34;
+ color: white;
+ padding: 2rem 0;
+ position: fixed;
+ left: 0;
+ top: 0;
+ right: 0;
+ z-index: 500;
+}
+.menu2 {
+ 
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+}
+.menu a {
+ color: white;
+ text-decoration: none;
+}
+.menu3 ul {
+ margin: 0;
+ padding: 0;
+ list-style: none;
+}
+.menu3 ul li {
+ display: inline-block;
+}
+.menu3 ul li a {
+
+ display: block;
+ padding: 0.5rem 1rem;
+ transition: all 0.3s linear;
+ border-radius: 4px;
+}
+.menu3 ul li a:hover {
+ background-color: dimgrey;
+}
+#actual {
+ color: aqua;
+}
+
+
+
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+  
+}
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 15s linear;
+  }
+}
