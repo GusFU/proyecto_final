@@ -1,6 +1,10 @@
 
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
+import Footer from "../components/Footer";
+
+
 //Componente funcional -> 
 function Principal() {
 
@@ -10,20 +14,17 @@ function Principal() {
   const [loginOk, setLoginOk] = useState(2);
   const [token, setToken] = useState("")
   const [registrado, setRegistrado] = useState("")
-  useEffect(() => {
-   setRegistrado(localStorage.getItem("registrado"))
-    }, []);
-
-
+  const [usuario, setUsuario] = useState("")
 
   useEffect(() => {
-    if(token){
-      localStorage.setItem("token",token)
+    setRegistrado(localStorage.getItem("registrado"))
+  }, []);
+  useEffect(() => {
+    if (token) {
+      localStorage.setItem("token", token)
     }
     if (loginOk == 1) {
-
-
-      navigate('/profile');
+      navigate('/profile', usuario);
     }
   }, [loginOk]);
 
@@ -38,8 +39,9 @@ function Principal() {
       .then((res) => {
         setToken(res.token)
         setLoginOk(res.loginOk)
+        setUsuario(res.usuario)
       });
-   
+
 
 
 
@@ -49,36 +51,44 @@ function Principal() {
 
 
   return (
+
+
+
     <div className="App">
       <header className="App-header">
-        <div class="nav App-logo" >
+        <div  >
           <h1 class="cuadrado">facegus</h1>
+
         </div>
       </header>
       <div class="fondo1">
         <div class="fondo2">
-          <div>
-            <span>{registrado ? "registrado correctamente":""}</span>
-            <h2>Login</h2>
-            <label>Email</label>
-            <input type="email" onChange={(e) => setEmail(e.target.value)} />
-            <br></br>
 
-            <label >Contraseña</label>
-            <input type="password" onChange={(e) => setContrasena(e.target.value)} />
+          <span>{registrado ? "registrado correctamente" : ""}</span>
+          <h2>Login</h2>
+          <label>Email</label>
+          <input type="email" onChange={(e) => setEmail(e.target.value)} />
+          <br></br>
 
-            <p> {loginOk == 1 ? "" : loginOk == 0 ? "Email o contraseña incorrectos" : ""}</p>
-            <button onClick={() => sendLogin()}>Login</button>
-          </div>
+          <label >Contraseña</label>
+          <input type="password" onChange={(e) => setContrasena(e.target.value)} />
+
+          <p> {loginOk == 1 ? "" : loginOk == 0 ? "Email o contraseña incorrectos" : ""}</p>
+          <button onClick={() => sendLogin()}>Login</button>
           <a href="./registro" id="nameD"><b>Registro</b></a>
-          <div>
-           <img  src={require(`../DSC06632.JPG`)}  /> 
-            <p>Si has olvidado tu contraseña pincha <a href="./contrasena">aqui</a></p>
-          </div>
+          <p>Si has olvidado tu contraseña pincha <a href="./contrasena">aqui</a></p>
         </div>
 
+        <div>
+
+
+
+        </div>
+      
       </div>
+        <Footer />
     </div>
+
   );
 
 }

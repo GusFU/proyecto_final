@@ -1,29 +1,41 @@
+*{
+  margin: 0;
+}
+
+
 .App {
   text-align: center;
+  
 
 
 }
-.fondo1{
+
+
+.fondo1 {
   background-image: url("../public/fondo.jpg");
   background-size: cover;
-    background-attachment: fixed;
-    min-height: calc(100vh - 200px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  background-attachment: fixed;
+  width: 100%;
+  min-height: calc(100vh - 300px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
 }
-.fondo2{
+
+.fondo2 {
   background-color: rgb(96, 96, 96);
   width: 20%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  
+  margin: 0;
+
 }
 
 .App-logo {
-  
+
   pointer-events: none;
 }
 
@@ -31,58 +43,65 @@
 
 .App-header {
   background-color: #282c34;
-  height:  200px;
+  height: 200px;
   display: flex;
   flex-direction: column;
-  
+
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-  
-  
+
+
 }
 
 .menu {
   font-family: 'PT sans', Times, sans-serif;
- background: #282c34;
- color: white;
- padding: 2rem 0;
- position: fixed;
- left: 0;
- top: 0;
- right: 0;
- z-index: 500;
+  background: #282c34;
+  color: white;
+  padding: 2rem 0;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 500;
 }
+
 .menu2 {
- 
- display: flex;
- justify-content: space-between;
- align-items: center;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
+
 .menu a {
- color: white;
- text-decoration: none;
+  color: white;
+  text-decoration: none;
 }
+
 .menu3 ul {
- margin: 0;
- padding: 0;
- list-style: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
+
 .menu3 ul li {
- display: inline-block;
+  display: inline-block;
 }
+
 .menu3 ul li a {
 
- display: block;
- padding: 0.5rem 1rem;
- transition: all 0.3s linear;
- border-radius: 4px;
+  display: block;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s linear;
+  border-radius: 4px;
 }
+
 .menu3 ul li a:hover {
- background-color: dimgrey;
+  background-color: dimgrey;
 }
+
 #actual {
- color: aqua;
+  color: aqua;
 }
 
 
@@ -92,13 +111,47 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
-  
+
 }
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 15s linear;
   }
 }
+
+.banners {
+  background-image: url("../public/fondo.jpg");
+  margin-top: 150px;
+  outline: 6px dashed rgb(76, 76, 46);
+  box-shadow: 0 0 0 6px #0b5804;
+}
+@keyframes animateBorder {
+  from{outline-color: #5500ff;
+    box-shadow: 0 0 0 6px rgb(109, 109, 56);
+
+  }
+  to {
+    outline-color: #8f5cf4;
+    box-shadow: 0 0 0 6px #0b5804;
+  }
+}
+.banners{
+  outline: 6px dashed rgb(54, 98, 68);
+  box-shadow: 0 0 0 6px #a3001e;
+  animation: 1s animateBorder infinite;
+  
+}
+
+.footer{
+  background-color: rgb(96, 96, 96);
+  width: 100%;
+  height: 100px;
+  border: ridge 3px #282c34;
+ 
+  
+} 

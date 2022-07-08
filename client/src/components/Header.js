@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+
 //Componente funcional -> 
 function Header() {
 
@@ -9,12 +9,6 @@ function Header() {
 
 
     return (
-       
-      
-
-
-
-
 <header class="menu">
 <div class="menu1 menu2">
     <div class="logo1">

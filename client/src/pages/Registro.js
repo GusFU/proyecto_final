@@ -39,41 +39,43 @@ function Registro() {
 
     return (
         <div className="App">
-            <header className="App-header">
-                <div class="nav" >
-                    <h1>facegus</h1>
-                </div>
-
-            </header>
-            <p>{!registrado ? "El email ya esta registrado": registrado==="" ? "":""}</p>
-            <label>Nombre
-                <input type="nombre" onChange={(e) => setNombre(e.target.value)} />
-            </label>
-            <label>Primer apellido
-                <input type="apellido1" onChange={(e) => setApellido1(e.target.value)} />
-            </label>
-            <label>Segundo apellido
-                <input type="apellido2" onChange={(e) => setApellido2(e.target.value)} />
-            </label>
-            <label>Cumpleaños
-                <input type="cumpleanos" onChange={(e) => setCumpleanos(e.target.value)} />
-            </label>
-            <label>Alias
-                <input type="alias" onChange={(e) => setAlias(e.target.value)} />
-            </label>
-            <label>Estado civil
-                <input type="estado_civil" onChange={(e) => setEstado_civil(e.target.value)} />
-            </label>
-            <label>Pais
-                <input type="pais" onChange={(e) => setPais(e.target.value)} />
-            </label>
-            <label>Email
+             <header className="App-header">
+        <div class="nav App-logo" >
+          <h1 class="cuadrado">facegus</h1>
+        </div>
+      </header>
+            <div class="fondo1">
+                <div class="fondo2">
+            <p>{registrado ? "": registrado==="" ? "":"El email ya esta registrado"}</p>
+            <label>Nombre</label>
+                <input type="text" onChange={(e) => setNombre(e.target.value)} />
+            
+            <label>Primer apellido</label>
+                <input type="text" onChange={(e) => setApellido1(e.target.value)} />
+            
+            <label>Segundo apellido</label>
+                <input type="text" onChange={(e) => setApellido2(e.target.value)} />
+            
+            <label>Cumpleaños</label>
+                <input type={"date"} onChange={(e) => setCumpleanos(e.target.value)} />
+            
+            <label>Alias</label>
+                <input type="text" onChange={(e) => setAlias(e.target.value)} />
+            
+            <label>Estado civil</label>
+                <input type="text" onChange={(e) => setEstado_civil(e.target.value)} />
+            
+            <label>Pais</label>
+                <input type="text" onChange={(e) => setPais(e.target.value)} />
+            
+            <label>Email</label>
                 <input type="email" onChange={(e) => setEmail(e.target.value)} />
-            </label>
-            <label>Contraseña
-                <input type="contrasena" onChange={(e) => setContrasena(e.target.value)} />
-            </label>
-
+            
+            <label>Contraseña</label>
+                <input type="password" onChange={(e) => setContrasena(e.target.value)} />
+            
+            </div>
+            </div>
            
             <button onClick={() => sendRegister()}>Registrate</button>
         </div>

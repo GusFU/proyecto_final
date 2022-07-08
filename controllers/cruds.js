@@ -10,7 +10,7 @@ const user = require("./user.controllers2");
 const cruds = {
 
     login: async (req, res) => {
-        
+
         const connection = mysql.createConnection({
             host: 'localhost',
             user: 'root',
@@ -19,17 +19,17 @@ const cruds = {
         });
         const email = req.body.email
         const contrasena = await user.SHA1(req.body.contrasena)
-        
+
         let query = `SELECT * from logins WHERE email = "${email}" AND contrasena = "${contrasena}"`;
         connection.query(query, async (err, rows) => {
             if (err) throw err;
             if (await rows.length == 0) {
-                res.json({loginOk: 0})
+                res.json({ loginOk: 0 })
             } else {
+                console.log(rows)
+                var token = user.autenticacion(rows.email)
 
-               var token = user.autenticacion(rows.email)
-
-                res.json({loginOk: 1,token})
+                res.json({ loginOk: 1, token,usuario: rows.id })
             }
 
             connection.end();
@@ -47,8 +47,8 @@ const cruds = {
         const apellido2 = req.body.apellido2
         const cumpleanos = req.body.cumpleanos
         const alias = req.body.alias
-        
-        
+
+
         const email = req.body.email
         const contrasena = await user.SHA1(req.body.contrasena)
         const pais = req.body.pais
@@ -86,17 +86,18 @@ const cruds = {
                     connection.end();
 
                 });
-                res.json({registro: true})
+                res.json({ registro: true })
 
             } else {
-                res.json({registro:false})
+                res.json({ registro: false })
             }
         });
     },
     mejores10Fotos: async (req, res) => {
+        
         var las10_fotos = []
         var cada_comentario = []
-        //   let userJson = {
+        // let userJson = {
         //     _id: new mongoose.Types.ObjectId(),
         //     id_usuario: 3,
         //     id_foto: "url",
@@ -106,20 +107,22 @@ const cruds = {
         var los_me_gusta_fotos = await Me_gusta_foto.find({})
         var los10_mas_me_gusta = user.mejores_fotos2(los_me_gusta_fotos)
 
-
+       
         for await (let id of los10_mas_me_gusta) {
-            var id10_mas_me_gusta = await Fotos.find({ id_: mongoose.mongo.ObjectId(id) })
-            las10_fotos.push(id10_mas_me_gusta[0].foto)
+            
+            var id10_mas_me_gusta = await Fotos.findOne({ id_foto: id })
+            
+            las10_fotos.push(id10_mas_me_gusta.foto)
         }
-
+        
         var comentarios_recibidos = await comentarios.find({ id_usuario_recibido: 2 })//cuando haga login de algun modo hay que conseguir 
         //la id de usuario
-        
+
         for (i = 0; i < comentarios_recibidos.length; i++) {
             cada_comentario[i] = comentarios_recibidos[i].mensaje
         }
 
-        
+
         //         for await (let coment of comentarios_recibidos) {
         // console.log(coment.comentario)
         //             cada_comentario.push(coment)// ****************************************oooojjjoooooo*****************************
@@ -143,14 +146,14 @@ const cruds = {
 
 
 
-                    res.json({ nombres_comentarios, las10_fotos, cada_comentario })//{las10_fotos:las10_fotos,comentarios_recibidos:comentarios_recibidos}
+                    res.json({las10_fotos, comentarios:{cada_comentario,nombres_comentarios} })//{las10_fotos:las10_fotos,comentarios_recibidos:comentarios_recibidos}
                     connection.end();
                 }
             });
         }
 
 
-
+        
 
 
 
