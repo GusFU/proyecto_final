@@ -1,23 +1,17 @@
 const jwt = require("jsonwebtoken");
+const sendMail = require("../email");
 const SECRET = "tallerjwt";
+
+//const cruds = require("./cruds");
+
 const user = {
-    autenticacion: (emailUser) => {
-        
-        
-        const payload = {
-            email: emailUser
-           
-        };
-        const token = jwt.sign(payload, SECRET, { expiresIn: "15m" });
-        return token
-    },
 
     registro: (req, res) => {
 
         res.render("registro");
 
     },
-    SHA1: async (msg) => {
+    SHA1: (msg) => {
         function rotate_left(n, s) {
             var t4 = (n << s) | (n >>> (32 - s));
             return t4;
@@ -165,7 +159,65 @@ const user = {
 
         return fotos11
 
-    }
+    },
+    
+
+    
+    
+    //mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+     confirmedUser: async (req, res) => {
+         let emailUser = req.body.email;
+
+         //var emailcomprobado = await cruds.compararmail(emailUser)
+
+        //  if (emailcomprobado.length == 0) {
+        //      res.send(0)
+        //  } else {
+
+
+             const payload = {
+                 email: emailUser
+
+             };
+
+             const token = jwt.sign(payload, SECRET, { expiresIn: "15m" });
+
+             
+             const link1= `<a href="http://localhost:3000/cambiocontrasena/${emailUser}/${token}">Cambiar contraseña</a>`
+             sendMail("gustavokakoka7@gmail.com", `${emailUser}`, "Recuperación de contraseña", `${link1}`)
+
+             res.json({
+                message:"Mira tu correo para verificar que eres tu"
+             });
+        // }
+     },
+
+     checkUserPost: (req, res) => {
+         const { email } = req.body;
+         let objectToSave = { status: true, email: email };
+
+         fs.writeFile(
+             "archivo.json",
+             JSON.stringify(objectToSave),
+             "utf8",
+             (err) => {
+                 if (err) throw err;
+                 console.log("Archivo guardado");
+             }
+         );
+     },
+     confirmUserGet: async (req, res) => {
+         const { token } = req.params;
+         console.log(token)
+         try {
+             jwt.verify(token, SECRET);
+
+             res.render("confirmed-user");
+         } catch (error) {
+             res.send("No se puede confirmar el usuario, token inválido");
+         }
+     },
+    
 
 
 }

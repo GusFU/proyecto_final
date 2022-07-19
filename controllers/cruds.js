@@ -4,7 +4,13 @@ const Me_gusta_foto = require('../models/me_gusta.model');
 const Fotos = require('../models/fotos.model')
 const comentarios = require('../models/comentarios_recibidos.model')
 const user = require("./user.controllers2");
-
+const comentariosenfotos = require("../models/comentariosenfotos");
+const jwt = require("jsonwebtoken");
+const SECRET = "tallerjwt";
+const sendMail = require("../email");
+const multer = require('multer')({
+    dest: 'public/images'
+})
 
 
 const cruds = {
@@ -26,10 +32,10 @@ const cruds = {
             if (await rows.length == 0) {
                 res.json({ loginOk: 0 })
             } else {
-                console.log(rows)
-                var token = user.autenticacion(rows.email)
 
-                res.json({ loginOk: 1, token,usuario: rows.id })
+
+
+                res.json({ loginOk: 1, usuario: rows[0].id })
             }
 
             connection.end();
@@ -94,9 +100,10 @@ const cruds = {
         });
     },
     mejores10Fotos: async (req, res) => {
-        
+        var todo = []
         var las10_fotos = []
         var cada_comentario = []
+
         // let userJson = {
         //     _id: new mongoose.Types.ObjectId(),
         //     id_usuario: 3,
@@ -107,26 +114,24 @@ const cruds = {
         var los_me_gusta_fotos = await Me_gusta_foto.find({})
         var los10_mas_me_gusta = user.mejores_fotos2(los_me_gusta_fotos)
 
-       
+
         for await (let id of los10_mas_me_gusta) {
-            
+
             var id10_mas_me_gusta = await Fotos.findOne({ id_foto: id })
-            
+
             las10_fotos.push(id10_mas_me_gusta.foto)
         }
-        
-        var comentarios_recibidos = await comentarios.find({ id_usuario_recibido: 2 })//cuando haga login de algun modo hay que conseguir 
+
+        var comentarios_recibidos = await comentarios.find({ id_usuario_recibido: req.body.usuario })//cuando haga login de algun modo hay que conseguir 
         //la id de usuario
+        var fotosMuro = await Fotos.find({ id_usuario: req.body.usuario })
 
         for (i = 0; i < comentarios_recibidos.length; i++) {
             cada_comentario[i] = comentarios_recibidos[i].mensaje
         }
 
 
-        //         for await (let coment of comentarios_recibidos) {
-        // console.log(coment.comentario)
-        //             cada_comentario.push(coment)// ****************************************oooojjjoooooo*****************************
-        //         }
+
 
 
         const connection = mysql.createConnection({
@@ -143,17 +148,133 @@ const cruds = {
                 if (err) throw err;
                 nombres_comentarios.push(rows[0])
                 if (nombres_comentarios.length == comentarios_recibidos.length) {
+                    for (let i = 0; i < cada_comentario.length; i++) {
+                        todo[i] = { nombre: nombres_comentarios[i], comentario: cada_comentario[i] }
+                    }
+                    todo.reverse()
 
 
 
-                    res.json({las10_fotos, comentarios:{cada_comentario,nombres_comentarios} })//{las10_fotos:las10_fotos,comentarios_recibidos:comentarios_recibidos}
+
+                    res.json({ las10_fotos, todo, fotosMuro })//{las10_fotos:las10_fotos,comentarios_recibidos:comentarios_recibidos}
                     connection.end();
                 }
             });
         }
+    },
+    subirComentario: async (req, res) => {
+        let comentario = req.body.subircomentario
+        let usuario1 = req.body.usuarioescrito
+        let usuario2 = req.body.usuariorecibido
+        let fecha = new Date()
+        var fecha1 = fecha.getFullYear() + '-' + (fecha.getMonth() + 1) + '-' + fecha.getDate();
+        let userJson = {
+            fecha: fecha1,
+            id_usuario_escrito: usuario1,
+            id_usuario_recibido: usuario2,
+            mensaje: comentario
+        };
+        let subir1comentario = new comentarios(userJson)
+
+        subir1comentario.save(function (err, subir1comentario) {
+            if (err) return res.send(500, err.message);
+            res.status(200).jsonp(subir1comentario);
+        })
+
+    },
+    comentFotos: async (req, res) => {
+        var id = parseInt(req.body.id_foto);
+
+        var coment_fotos = await comentariosenfotos.find({ id_foto: id })
+        if (coment_fotos.length == 0) {
+            res.json({ comentariosf: 0 })
+        } else {
+
+            res.json({ comentariosf: coment_fotos })
+        }
+    },
+    subirFoto: async (req, res) => {
+
+        var fotosMuro = await Fotos.find({})
+        var id_foto1 = fotosMuro.length + 1
 
 
-        
+
+        let fecha = new Date()
+        var fecha1 = fecha.getFullYear() + '-' + (fecha.getMonth() + 1) + '-' + fecha.getDate();
+        let userJson1 = {
+            foto: req.body.image,
+            fecha: fecha1,
+            id_usuario: req.body.usuario,
+            id_foto: id_foto1
+        };
+
+        let subir1foto = new Fotos(userJson1)
+
+        subir1foto.save(function (err, subir1foto) {
+            if (err) return res.send(500, err.message);
+            
+        })
+
+ let userJson2 = {
+     id_usuario: req.body.usuario,
+     id_foto: id_foto1,
+     me_gusta: 0,
+     no_me_gusta: 0
+         };
+
+         let megusta = new Me_gusta_foto(userJson2)
+         megusta.save(function (err, megusta) {
+             if (err) return res.send(500, err.message);
+             res.status(200).jsonp(megusta);
+         })
+  
+
+
+
+
+
+    },
+    megusta: async (req, res) => {
+        var me_gustasinfo = await Me_gusta_foto.findOne({ id_foto: req.body.id })
+        var me_gusta = me_gustasinfo.me_gusta + 1
+        await Me_gusta_foto.updateOne({ id_foto: req.body.id }, {
+            me_gusta: me_gusta
+        });
+    },
+    nomegusta: async (req, res) => {
+        var me_gustasinfo = await Me_gusta_foto.findOne({ id_foto: req.body.id })
+        var no_me_gusta = me_gustasinfo.no_me_gusta + 1
+        await Me_gusta_foto.updateOne({ id_foto: req.body.id }, {
+            no_me_gusta: no_me_gusta
+        });
+    },
+    buscaramigo: async (req, res) => {
+        var email = req.body.amigo
+        const connection = mysql.createConnection({
+            host: 'localhost',
+            user: 'root',
+            password: 'root',
+            database: 'Facegus'
+        });
+        let query = `SELECT * from Logins WHERE email = "${email}"`;
+        connection.query(query, async (err, rows) => {
+            if (err) throw err;
+            if (await rows.length == 0) {
+                connection.end
+                res.json({ amigo: 0 })
+            } else {
+
+                let query = `SELECT * from Usuarios WHERE fk_id_login = "${rows.id}"`;
+                connection.query(query, async (err, rows1) => {
+                    if (err) throw err;
+
+
+                    connection.end
+
+                    res.json({ amigo: 1, infoamigo: rows1 })
+                });
+            }
 
 
 
@@ -161,8 +282,63 @@ const cruds = {
 
 
 
+        });
+    },
+    compararmail: async (email) => {
 
-    }
+        const connection = mysql.createConnection({
+            host: 'localhost',
+            user: 'root',
+            password: 'root',
+            database: 'Facegus'
+        });
+
+
+        let query = `SELECT email from logins WHERE email = "${email}" `;
+        connection.query(query, async (err, rows) => {
+            if (err) throw err;
+            if (await rows.length == 0) {
+                connection.end();
+                return 0
+            } else {
+                connection.end();
+                return 1
+
+            }
+
+
+        });
+
+    },
+    checkUserPost: (req, res) => {
+        const { email, contrasena, token } = req.body;
+        var contrasena1 = user.SHA1(contrasena)
+        const connection = mysql.createConnection({
+            host: 'localhost',
+            user: 'root',
+            password: 'root',
+            database: 'Facegus'
+        });
+        let query = `SELECT * from Logins WHERE email = '${email}' `;
+        connection.query(query, async (err, rows1) => {
+            if (err) throw err;
+            if (rows1[0].email == email) {
+
+                const check = jwt.verify(token, SECRET);
+                let updateQuery = "UPDATE ?? SET ?? = ? WHERE ?? = ?";
+                let query1 = mysql.format(updateQuery, ["Logins", "contrasena", `${contrasena1}`, "id", `${rows1[0].id}`]);
+                connection.query(query1, (err, res1) => {
+                    if (err) throw err;
+                    connection.end();
+                    sendMail("gustavokakoka7@gmail.com", `${email}`, "Cambio de contraseña", "tu contraseña se ha cambiado")
+                    res.json({
+                        message: "Contraseña cambiada cierra la ventana y haz login"
+                    });
+                })
+            }
+        });
+    },
+
 }
 
 

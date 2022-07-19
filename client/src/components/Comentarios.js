@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from "react";
 
 function Comentarios(props) {
-//     function comentari(props) {
 
+    return(
+<div class="comentarios">
+    
+            {!props.name ? "" :(props.name).map(item => {
+                
+                return (
 
-
-//         return (
-//             <div>
-//                 {props ? for(let i=0;i< props.name.lenght;i++){
-//                     <p>{props.coment.nombres_comentarios[i]} : {props.coment.cada_comentario[i]}</p>  } :""}
-              
-
-// }
-//             </div>
-
-//         );
+                    <p><span class="nombres">{item.nombre.nombre}:</span>{item.comentario}</p>
+        )})}
+            </div>
+    );
 
     }
 

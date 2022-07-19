@@ -20,12 +20,7 @@ function Header() {
             <li>
                  <a href="./profile" id="nameD"><b>Muro</b></a>
             </li>
-            <li>
-            <a href="./miPerfil" id="nameD"><b>Mi perfil</b></a>
-            </li>
-            <li>
-            <a href="./notificaciones" id="nameD"><b>Notificaciones</b></a>
-            </li>
+            
         </ul>
     </nav>
 </div>

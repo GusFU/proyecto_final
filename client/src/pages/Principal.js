@@ -12,19 +12,18 @@ function Principal() {
   const [email, setEmail] = useState("");
   const [contrasena, setContrasena] = useState("");
   const [loginOk, setLoginOk] = useState(2);
-  const [token, setToken] = useState("")
-  const [registrado, setRegistrado] = useState("")
+  const [registrado, setRegistrado] = useState("");
   const [usuario, setUsuario] = useState("")
 
   useEffect(() => {
     setRegistrado(localStorage.getItem("registrado"))
   }, []);
   useEffect(() => {
-    if (token) {
-      localStorage.setItem("token", token)
+    if (usuario) {
+      localStorage.setItem("usuario", usuario)
     }
     if (loginOk == 1) {
-      navigate('/profile', usuario);
+      navigate('/profile');
     }
   }, [loginOk]);
 
@@ -37,7 +36,7 @@ function Principal() {
     fetch("login", requestOptions)
       .then((response) => response.json())
       .then((res) => {
-        setToken(res.token)
+       
         setLoginOk(res.loginOk)
         setUsuario(res.usuario)
       });
