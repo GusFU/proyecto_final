@@ -6,7 +6,7 @@ import Mejores_fotos1 from "../components/Mejores_fotos1";
 import Comentarios from "../components/Comentarios";
 import Fotos from "../components/Fotos";
 import Botonbuscaramigos from "../components/Botonbuscaramigos";
-
+import Amigos from "../components/Amigos";
 
 function Profile() {
     const navigate = useNavigate()
@@ -16,6 +16,8 @@ function Profile() {
     const [fotosMuro, setFotosMuro] = useState("");
     const [subircomentario, setSubircomentario] = useState("");
     const [images, setImages] = useState("");
+    const [amigos, setAmigos] = useState("");
+    
 
     useEffect(() => {
         if (usuario) {
@@ -30,8 +32,10 @@ function Profile() {
                     setMejores_fotos(res.las10_fotos)
                     setComentarios(res.todo)
                     setFotosMuro(res.fotosMuro)
+                    setAmigos(res.amigos)
 
                 });
+
         } else {
             navigate('/');
         }
@@ -83,25 +87,39 @@ function Profile() {
         <React.StrictMode>
             <div className="App">
                 <Header />
+                
                 <div className="body">
 
                     <Mejores_fotos1 name={mejores_fotos} />
                     <div class="container">
-                        <div class="subircomentario">
-                            <label>
-                                Escribe un comentario para tu muro
-                            </label>
-                            <input type="text" onChange={(e) => setSubircomentario(e.target.value)} />
-                            <button onClick={() => sendComentario()}>Enviar</button>
-                            <p>
-                                Sube una imagen para tu muro
-                            </p>
-                            <input type="file" name="file" accept="image/*" onChange={(e) => setImages(e.target.files[0])}></input>
-                            <button onClick={() => sendImage()}>Enviar</button>
-                            <Botonbuscaramigos/>
+                        <div class="subir">
+                            <div class="subircomentario">
+                                <h2>
+                                    Escribe un comentario para tu muro
+                                </h2>
+                                <input type="text" onChange={(e) => setSubircomentario(e.target.value)} />
+                                <button onClick={() => sendComentario()}>Enviar</button>
+                            </div>
+                            <div class="subircomentario">
+                                <h2>
+                                    Sube una imagen para tu muro
+                                </h2>
+                                <input type="file" name="file" accept="image/*" onChange={(e) => setImages(e.target.files[0])}></input>
+                                <button onClick={() => sendImage()}>Enviar</button>
+                            </div>
+                            <div class="subircomentario">
+                            <Botonbuscaramigos />
+                            </div>
+                        </div>
+                        <div class="amigos">
+                            <h2>tus amigos</h2>
+                            <Amigos amigos={amigos}/>
                         </div>
                         <Comentarios name={comentarios} />
-                        <Fotos fotos={fotosMuro} />
+                        <div class="amigos">
+                        <h2 >FOTOS</h2>
+                        <Fotos fotos={fotosMuro} id1={usuario}/>
+                        </div>
                     </div>
                 </div>
 

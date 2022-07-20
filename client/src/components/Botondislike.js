@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 
 function Botondislike(props) {
-    const [usuario] = useState(localStorage.getItem("usuario"));
+    const [usuario] = useState(props.id1);
     const sendnomegusta = () => {
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({id:props.id,usuario }),
         };
-        fetch("nomegusta", requestOptions)
+        fetch("/nomegusta", requestOptions)
             .then((response) => response.json())
             .then((res) => {
 

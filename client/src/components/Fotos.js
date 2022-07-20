@@ -6,7 +6,8 @@ import Botondislike from "./Botondislike";
 
 
 function Fotos(props) {
-   const [fotos, setFotos] = useState("");
+   const [fotos, setFotos] = useState(props.fotos);
+   const [id1, setId1] = useState(props.id);
    useEffect(() => {
    
          setFotos(props.fotos)
@@ -25,8 +26,8 @@ function Fotos(props) {
                <div class="fotos1">
                   <img class="fotos" src={require(`../../public/images/` + item.foto)} width="150" />
                    <ComentariosFotos id={item.id_foto} /> 
-                  <Botonlike id={item.id_foto}/>
-                  <Botondislike id={item.id_foto}/>
+                  <Botonlike id={item.id_foto} id1={id1}/>
+                  <Botondislike id={item.id_foto} id1={id1}/>
                </div>
 
             )

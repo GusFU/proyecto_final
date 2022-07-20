@@ -63,8 +63,10 @@ CREATE TABLE Usuarios_usuarios (
     
 );
 
+SELECT * from logins WHERE email = "gqs@gus.com";
+UPDATE Usuarios SET foto_perfil =  "DSC06632.JPG" where id =9; 
 select * from Usuarios;
 select * from Logins;
 select * from Paises;
 select * from Estados_civiles;
-
+select * from Usuarios_usuarios;

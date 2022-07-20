@@ -154,10 +154,49 @@ const cruds = {
                     todo.reverse()
 
 
+                    let query1 = `SELECT * from Usuarios_usuarios WHERE (fk_id_usuario = ${req.body.usuario} or fk_id_amigo = ${req.body.usuario})`;
+                    connection.query(query1, async (err, rows1) => {
+                        if (err) throw err;
+                        if (rows1.length == 0) {
+                            connection.end();
+                            res.json({ amigos: 0, las10_fotos, todo, fotosMuro })
+
+                        } else {
+                            col_amigos = await rows1
+
+                            var id_amigos = []
+                            for (let i = 0; i < col_amigos.length; i++) {
+
+                                if (col_amigos[i].fk_id_usuario == req.body.usuario) {
+                                    id_amigos.push(col_amigos[i].fk_id_amigo)
+                                }
+                                if (col_amigos[i].fk_id_amigo == req.body.usuario) {
+                                    id_amigos.push(col_amigos[i].fk_id_usuario)
+                                }
+                            }
+                            var todoamigos = [];
+                            for await (let id3 of id_amigos) {
+                                
+                                let query2 = `SELECT * from Usuarios WHERE (id = ${id3})`;
+                                connection.query(query2, async (err, rows2) => {
+                                    if (err) throw err;
+                                    todoamigos.push(rows2)
+
+                                    if(id_amigos[id_amigos.length-1]==id3){
+                                    connection.end()
+                                    res.json({ amigos: todoamigos[0], las10_fotos, todo, fotosMuro, })
+                                }
+                                });
+                            }
+                        }
 
 
-                    res.json({ las10_fotos, todo, fotosMuro })//{las10_fotos:las10_fotos,comentarios_recibidos:comentarios_recibidos}
-                    connection.end();
+
+
+
+                        //{las10_fotos:las10_fotos,comentarios_recibidos:comentarios_recibidos}
+
+                    });
                 }
             });
         }
@@ -193,6 +232,25 @@ const cruds = {
             res.json({ comentariosf: coment_fotos })
         }
     },
+    subircomentfotos: async (req, res) => {
+
+        let idfoto = req.body.id_foto
+        let comentario = req.body.comentario
+        let fecha = new Date()
+        var fecha1 = fecha.getFullYear() + '-' + (fecha.getMonth() + 1) + '-' + fecha.getDate();
+        let userJson1 = {
+            id_usuario_escrito: req.body.usuario,
+            id_foto: req.body.id_foto,
+            fecha: fecha1,
+            mensaje: comentario
+        };
+        let subir1comentarioenfoto = new comentariosenfotos(userJson1)
+        subir1comentarioenfoto.save(function (err, subir1comentarioenfoto) {
+            if (err) return res.send(500, err.message);
+            res.status(200).jsonp(subir1comentarioenfoto);
+        })
+
+    },
     subirFoto: async (req, res) => {
 
         var fotosMuro = await Fotos.find({})
@@ -213,22 +271,22 @@ const cruds = {
 
         subir1foto.save(function (err, subir1foto) {
             if (err) return res.send(500, err.message);
-            
+
         })
 
- let userJson2 = {
-     id_usuario: req.body.usuario,
-     id_foto: id_foto1,
-     me_gusta: 0,
-     no_me_gusta: 0
-         };
+        let userJson2 = {
+            id_usuario: req.body.usuario,
+            id_foto: id_foto1,
+            me_gusta: 0,
+            no_me_gusta: 0
+        };
 
-         let megusta = new Me_gusta_foto(userJson2)
-         megusta.save(function (err, megusta) {
-             if (err) return res.send(500, err.message);
-             res.status(200).jsonp(megusta);
-         })
-  
+        let megusta = new Me_gusta_foto(userJson2)
+        megusta.save(function (err, megusta) {
+            if (err) return res.send(500, err.message);
+            res.status(200).jsonp(megusta);
+        })
+
 
 
 
@@ -265,14 +323,14 @@ const cruds = {
                 res.json({ amigo: 0 })
             } else {
 
-                let query = `SELECT * from Usuarios WHERE fk_id_login = "${rows.id}"`;
+                let query = `SELECT * from Usuarios WHERE id = "${rows[0].id}"`;
                 connection.query(query, async (err, rows1) => {
                     if (err) throw err;
 
 
                     connection.end
 
-                    res.json({ amigo: 1, infoamigo: rows1 })
+                    res.json({ amigo: 1, infoamigo: rows1[0] })
                 });
             }
 
@@ -283,6 +341,31 @@ const cruds = {
 
 
         });
+    },
+    haceramigo: async (req, res) => {
+
+        const connection = mysql.createConnection({
+            host: 'localhost',
+            user: 'root',
+            password: 'root',
+            database: 'Facegus'
+        });
+        let query = `SELECT * from Usuarios_usuarios WHERE (fk_id_usuario = ${req.body.usuario} and fk_id_amigo = ${req.body.infoamigo.id})`;
+        connection.query(query, async (err, rows1) => {
+            if (err) throw err;
+            if (rows1.length > 0) {
+                res.json({ ok: 2 })
+            } else {
+                const sql = `INSERT INTO Usuarios_usuarios  VALUES (null,"${req.body.usuario}","${req.body.infoamigo.id}")`;
+                connection.query(sql, (err) => {
+                    if (err) throw err;
+
+                    connection.end()
+                    res.json({ ok: 1 })
+                });
+            }
+        });
+
     },
     compararmail: async (email) => {
 

@@ -18,7 +18,7 @@ function Header() {
 
         <ul>
             <li>
-                 <a href="./profile" id="nameD"><b>Muro</b></a>
+                 <a href="/profile" id="nameD"><b>Muro</b></a>
             </li>
             
         </ul>

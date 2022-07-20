@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const objetoSchema = {
     id_usuario_escrito: Number,
-    id_usuario_recibido: Number,
     id_foto: Number,
     fecha: Date,
     mensaje: String

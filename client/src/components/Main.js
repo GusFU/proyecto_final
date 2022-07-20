@@ -5,6 +5,7 @@ import Registro from "../pages/Registro";
 import Profile from "../pages/Profile";
 import Contrasena from "../pages/Contrasena";
 import Cambiocontrasena from "../pages/Cambiocontrasena";
+import Muro from "../pages/Muro";
 
 class Main extends Component {
     constructor(props) {
@@ -20,6 +21,7 @@ class Main extends Component {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/contrasena" element={<Contrasena />} />
                 <Route path="/cambiocontrasena/:email/:token/" element={<Cambiocontrasena/>}/>
+                <Route path="/amigos/:usuario/" element={<Muro/>} />
             </Routes>
         </div>
         );

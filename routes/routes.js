@@ -4,11 +4,8 @@ const path = require("path");
 const user = require("../controllers/user.controllers2");
 const cruds = require("../controllers/cruds");
 
-//router.get("/",user.home)
-//router.get("/register",user.registro)
+
 router.post("/profile",cruds.mejores10Fotos)
-
-
 router.post("/register",cruds.saveDataForm)
 router.post("/login",cruds.login)
 router.post("/subircomentario", cruds.subirComentario);
@@ -16,7 +13,9 @@ router.post("/comentfotos", cruds.comentFotos);
 router.post("/subirfoto",cruds.subirFoto)
 router.post("/megusta", cruds.megusta);
 router.post("/nomegusta", cruds.nomegusta);
-router.post("/buscarmaigo", cruds.buscaramigo);
+router.post("/buscaramigo", cruds.buscaramigo);
+router.post("/haceramigo", cruds.haceramigo);
+router.post("/subircomentfotos",cruds.subircomentfotos)
 
 
 router.post("/confirmuser", user.confirmedUser);
